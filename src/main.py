@@ -17,7 +17,8 @@ def parseUrlFile(urlFile: str) -> list[Url]:
     for link in link_list:
         if link == "":  # Empty link ie. empty line
             continue
-        url_list.append(Url(link))
+        for l in link.split(','):
+            url_list.append(Url(l.strip()))
     f.close()
     return url_list
 
@@ -54,7 +55,7 @@ def calculate_scores(urls: list[Url]) -> None:
                     "net_score_latency": net_score_latency,
                     "url": url.link,
                     "error": "Invalid URL - Not a dataset, model, or code URL",
-                    # "size_score": {"raspberry_pi": 0.0, "jetson_nano": 0.0, "desktop_pc": 0.0, "aws_server": 0.0}
+                    "size_score": {"raspberry_pi": 0.0, "jetson_nano": 0.0, "desktop_pc": 0.0, "aws_server": 0.0}
                 }
             )
 
@@ -177,7 +178,7 @@ def calculate_scores(urls: list[Url]) -> None:
 
         # Trustworthiness assessment
         if avg_percentage >= 80:
-            print("🏆 Trustworthiness Level: EXCELLENT")
+            print("Trustworthiness Level: EXCELLENT")
         elif avg_percentage >= 60:
             print(" Trustworthiness Level: GOOD")
         elif avg_percentage >= 40:

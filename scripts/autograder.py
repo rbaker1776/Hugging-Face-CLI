@@ -13,7 +13,7 @@ from datetime import datetime
 import argparse
 from datetime import datetime
 
-GROUP_NUMBER = 101
+GROUP_NUMBER = 27
 BASE_URL = "http://dl-berlin.ecn.purdue.edu/api"
 GH_TOKEN = os.environ.get("GH_TOKEN", "")
 

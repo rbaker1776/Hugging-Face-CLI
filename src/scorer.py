@@ -117,42 +117,43 @@ def analyze_model_repository(
         "error": None,
     }
 
-    ## Create temporary directory for cloning
-    # temp_dir = tempfile.mkdtemp()
-    #
-    # try:
-    #    # Determine the repository URL based on type
-    #    if model_type == "model":
-    #        repo_url = f"https://huggingface.co/{model_name}"
-    #    elif model_type == "dataset":
-    #        repo_url = f"https://huggingface.co/datasets/{model_name}"
-    #    else:  # code
-    #        repo_url = f"https://github.com/{model_name}"
-    #
-    #    # Clone the repository using GitPython or subprocess fallback
-    #    print(f"Cloning repository: {repo_url}")
-    #
-    #    if GIT_PYTHON_AVAILABLE:
-    #        # Use GitPython for cloning
-    #        repo = Repo.clone_from(repo_url, temp_dir)
-    #    else:
-    #        # Fallback to subprocess (not ideal but works)
-    #        print("GitPython not available, using subprocess fallback")
-    #        result = subprocess.run(['git', 'clone', repo_url, temp_dir],
-    #                             capture_output=True, text=True, timeout=60)
-    #        if result.returncode != 0:
-    #            raise Exception(f"Git clone failed: {result.stderr}")
-    #
-    #    # Analyze the cloned repository
-    #    analysis = _analyze_model_files(temp_dir, model_name, model_type)
-    #
-    # except Exception as e:
-    #    analysis['error'] = f"Failed to clone repository: {str(e)}"
-    #    print(f"Repository cloning failed: {e}")
-    # finally:
-    #    # Clean up temporary directory
-    #    if os.path.exists(temp_dir):
-    #        shutil.rmtree(temp_dir)
+    # Create temporary directory for cloning
+    temp_dir = tempfile.mkdtemp()
+    
+    try:
+       # Determine the repository URL based on type
+       if model_type == "model":
+           repo_url = f"https://huggingface.co/{model_name}"
+       elif model_type == "dataset":
+           repo_url = f"https://huggingface.co/datasets/{model_name}"
+       else:  # code
+           repo_url = f"https://github.com/{model_name}"
+
+       # Clone the repository using GitPython or subprocess fallback
+       print(f"Cloning repository: {repo_url}")
+
+        # TODO: evaluate the use of GIT_PYTHON
+       if GIT_PYTHON_AVAILABLE and false:
+           # Use GitPython for cloning
+           repo = Repo.clone_from(repo_url, temp_dir)
+       else:
+           # Fallback to subprocess (not ideal but works)
+           print("GitPython not available, using subprocess fallback")
+           result = subprocess.run(['git', 'clone', repo_url, temp_dir],
+                                capture_output=True, text=True, timeout=60)
+           if result.returncode != 0:
+               raise Exception(f"Git clone failed: {result.stderr}")
+
+       # Analyze the cloned repository
+       analysis = _analyze_model_files(temp_dir, model_name, model_type)
+
+    except Exception as e:
+       analysis['error'] = f"Failed to clone repository: {str(e)}"
+       print(f"Repository cloning failed: {e}")
+    finally:
+       # Clean up temporary directory
+       if os.path.exists(temp_dir):
+           shutil.rmtree(temp_dir)
 
     return analysis
 
