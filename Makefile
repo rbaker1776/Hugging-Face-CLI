@@ -1,6 +1,6 @@
 PYFILES := $(shell git ls-files *.py)
 
-GROUP = 27
+GROUP = 101
 SCRIPT := scripts/autograder.py
 PYTHON := python3
 
@@ -45,6 +45,11 @@ check-script:
 
 run: check-token check-script
 	@$(PYTHON) $(SCRIPT)
+
+register: check-token
+	curl --location 'http://dl-berlin.ecn.purdue.edu/api/register' \
+	--header 'Content-Type: application/json' \
+	--data '{"group": 101,"github": "https://github.com/rbaker1776/Hugging-Face-CLI.git","names": ["Ryan Baker", "Nikhil Chaudhary", "Luisa Cruz", "Aadhavan Srinivasan"],"gh_token": "$(GH_TOKEN)"}'
 
 schedule: check-token check-script
 	@$(PYTHON) $(SCRIPT) --schedule
